@@ -1,4 +1,11 @@
-# promise
+### testing if it works 
+
+env 
+```
+DATABASE_URL="postgresql://postgres:secret@localhost:5432/postgres"
+GEMINI_API_KEY=your-api
+
+```
 
 To install dependencies:
 
