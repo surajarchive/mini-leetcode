@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "husky": "^9.1.7"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -17,6 +18,12 @@
     "express": "^5.1.0",
     "inngest": "^3.40.2",
     "notion-to-md": "^3.1.9",
+    "prettier": "^3.6.2",
     "prisma": "^6.15.0"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "postinstall": "prisma generate",
+    "dev": "bun index.ts"
   }
 }
