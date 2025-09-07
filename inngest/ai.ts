@@ -4,15 +4,10 @@ import { createAgent, gemini } from '@inngest/agent-kit'
  * Type definitions for clarity and reuse
  */
 export type Submission = {
-  submissionId: string
-  userId: string
   problem: string
+  description?: string
   code: string
   language: string
-  testCases: {
-    input: string
-    expected: string
-  }[]
 }
 
 export type EvaluationResult = {
@@ -86,7 +81,9 @@ Code:
 ${submission.code}
 
 Test Cases:
-${JSON.stringify(submission.testCases, null, 2)}
+
+test case will be provided in the problem description
+
 `)
 
   // @ts-ignore

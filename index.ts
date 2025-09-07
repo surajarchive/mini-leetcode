@@ -1,5 +1,5 @@
 import express from 'express'
-import evaluateCode, { type Submission } from './test'
+import evaluateCode, { type Submission } from './inngest/ai'
 
 const app = express()
 
