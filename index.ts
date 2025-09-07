@@ -1,31 +1,29 @@
-import express from "express";
-import evaluateCode, { type Submission } from "./test"; 
+import express from 'express'
+import evaluateCode, { type Submission } from './test'
 
-const app = express();
+const app = express()
 
-app.use(express.json());
+app.use(express.json())
 
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html')
+})
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
-
-
-app.post("/api/evaluate", async (req, res) => {
-  const submission: Submission = req.body;
+app.post('/api/evaluate', async (req, res) => {
+  const submission: Submission = req.body
   try {
-    const result = await evaluateCode(submission);
+    const result = await evaluateCode(submission)
     if (!result) {
-      return res.status(500).json({ error: "Evaluation failed" });
+      return res.status(500).json({ error: 'Evaluation failed' })
     }
-    return res.json(result);
+    return res.json(result)
   } catch (err: any) {
-    console.error("Evaluation error:", err);
-    return res.status(500).json({ error: err.message });
+    console.error('Evaluation error:', err)
+    return res.status(500).json({ error: err.message })
   }
-});
+})
 
-const PORT = 4000;
+const PORT = 4000
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-});
+  console.log(`✅ Server running on http://localhost:${PORT}`)
+})

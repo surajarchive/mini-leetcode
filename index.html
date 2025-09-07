@@ -1,36 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Mini LeetCode AI Evaluator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  </head>
 
-<body class="bg-gray-100 h-screen font-sans">
+  <body class="bg-gray-100 h-screen font-sans">
     <div class="grid grid-cols-2 h-screen">
-        <!-- LEFT: Problem + Test Cases -->
-        <div class="bg-white p-6 border-r border-gray-300 overflow-y-auto">
-            <h1 class="text-2xl font-bold mb-4">Problem</h1>
-            <p id="problem" class="text-gray-700 mb-6">
-                Create an Express.js server with a /factorial route. The route accepts JSON {n}. If n >= 0, return
-                status 200 with {result: factorial(n)}. Otherwise return status 400 with {message: "Invalid input"}.
-            </p>
+      <!-- LEFT: Problem + Test Cases -->
+      <div class="bg-white p-6 border-r border-gray-300 overflow-y-auto">
+        <h1 class="text-2xl font-bold mb-4">Problem</h1>
+        <p id="problem" class="text-gray-700 mb-6">
+          Create an Express.js server with a /factorial route. The route accepts
+          JSON {n}. If n >= 0, return status 200 with {result: factorial(n)}.
+          Otherwise return status 400 with {message: "Invalid input"}.
+        </p>
 
-            <h2 class="text-xl font-semibold mb-3">Test Cases</h2>
-            <ul class="space-y-2 text-gray-600 text-sm">
-                <li>{"n":5} → 120</li>
-                <li>{"n":0} → 1</li>
-                <li>{"n":-3} → Invalid input</li>
-                <li>{} → Invalid input</li>
-            </ul>
-        </div>
+        <h2 class="text-xl font-semibold mb-3">Test Cases</h2>
+        <ul class="space-y-2 text-gray-600 text-sm">
+          <li>{"n":5} → 120</li>
+          <li>{"n":0} → 1</li>
+          <li>{"n":-3} → Invalid input</li>
+          <li>{} → Invalid input</li>
+        </ul>
+      </div>
 
-        <!-- RIGHT: Code editor + submit + results -->
-        <div class="bg-gray-50 flex flex-col p-6">
-            <h2 class="text-xl font-bold mb-3">Your Code</h2>
-            <textarea id="code"
-                class="flex-1 w-full p-3 bg-gray-900 text-green-200 font-mono text-sm rounded-lg border border-gray-300 overflow-auto">
+      <!-- RIGHT: Code editor + submit + results -->
+      <div class="bg-gray-50 flex flex-col p-6">
+        <h2 class="text-xl font-bold mb-3">Your Code</h2>
+        <textarea
+          id="code"
+          class="flex-1 w-full p-3 bg-gray-900 text-green-200 font-mono text-sm rounded-lg border border-gray-300 overflow-auto"
+        >
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -44,105 +46,126 @@ app.post("/factorial", (req, res) => {
 });
 
 module.exports = app;
-      </textarea>
+      </textarea
+        >
 
-            <button id="submitBtn"
-                class="mt-4 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg">
-                🚀 Submit Code
-            </button>
+        <button
+          id="submitBtn"
+          class="mt-4 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+        >
+          🚀 Submit Code
+        </button>
 
-            <div id="results" class="mt-4 p-4 bg-white rounded-lg shadow overflow-y-auto h-64">
-                <p class="text-gray-400">Results will appear here...</p>
-            </div>
+        <div
+          id="results"
+          class="mt-4 p-4 bg-white rounded-lg shadow overflow-y-auto h-64"
+        >
+          <p class="text-gray-400">Results will appear here...</p>
         </div>
+      </div>
     </div>
 
     <script>
-        const submitBtn = document.getElementById("submitBtn");
+      const submitBtn = document.getElementById('submitBtn')
 
-        submitBtn.addEventListener("click", async () => {
-            // Disable button and show loading
-            submitBtn.disabled = true;
-            submitBtn.classList.add("opacity-50", "cursor-not-allowed");
-            submitBtn.textContent = "⏳ Running...";
+      submitBtn.addEventListener('click', async () => {
+        // Disable button and show loading
+        submitBtn.disabled = true
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed')
+        submitBtn.textContent = '⏳ Running...'
 
-            const code = document.getElementById("code").value;
-            const problem = document.getElementById("problem").innerText;
+        const code = document.getElementById('code').value
+        const problem = document.getElementById('problem').innerText
 
-            const payload = {
-                submissionId: "sub-" + Date.now(),
-                userId: "frontend-user",
-                problem,
-                code,
-                language: "javascript",
-                testCases: [
-                    { input: '{"n":5}', expected: '{"status":200,"body":{"result":120}}' },
-                    { input: '{"n":0}', expected: '{"status":200,"body":{"result":1}}' },
-                    { input: '{"n":-3}', expected: '{"status":400,"body":{"message":"Invalid input"}}' },
-                    { input: '{}', expected: '{"status":400,"body":{"message":"Invalid input"}}' }
-                ]
-            };
+        const payload = {
+          submissionId: 'sub-' + Date.now(),
+          userId: 'frontend-user',
+          problem,
+          code,
+          language: 'javascript',
+          testCases: [
+            {
+              input: '{"n":5}',
+              expected: '{"status":200,"body":{"result":120}}',
+            },
+            {
+              input: '{"n":0}',
+              expected: '{"status":200,"body":{"result":1}}',
+            },
+            {
+              input: '{"n":-3}',
+              expected: '{"status":400,"body":{"message":"Invalid input"}}',
+            },
+            {
+              input: '{}',
+              expected: '{"status":400,"body":{"message":"Invalid input"}}',
+            },
+          ],
+        }
 
-            try {
-                const res = await fetch("http://localhost:4000/api/evaluate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                renderResults(data);
-            } catch (err) {
-                document.getElementById("results").innerHTML = `<p class="text-red-500">❌ Error: ${err.message}</p>`;
-            } finally {
-                // Re-enable button and reset text
-                submitBtn.disabled = false;
-                submitBtn.classList.remove("opacity-50", "cursor-not-allowed");
-                submitBtn.textContent = "🚀 Submit Code";
-            }
-        });
+        try {
+          const res = await fetch('http://localhost:4000/api/evaluate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+          const data = await res.json()
+          renderResults(data)
+        } catch (err) {
+          document.getElementById('results').innerHTML =
+            `<p class="text-red-500">❌ Error: ${err.message}</p>`
+        } finally {
+          // Re-enable button and reset text
+          submitBtn.disabled = false
+          submitBtn.classList.remove('opacity-50', 'cursor-not-allowed')
+          submitBtn.textContent = '🚀 Submit Code'
+        }
+      })
 
-        function renderResults(data) {
-            const container = document.getElementById("results");
-            container.innerHTML = "";
+      function renderResults(data) {
+        const container = document.getElementById('results')
+        container.innerHTML = ''
 
-            if (!data || !data.results) {
-                container.innerHTML = "<p class='text-red-500'>❌ Evaluation failed</p>";
-                return;
-            }
+        if (!data || !data.results) {
+          container.innerHTML =
+            "<p class='text-red-500'>❌ Evaluation failed</p>"
+          return
+        }
 
-            // Show score at top
-            const score = document.createElement("h3");
-            score.className = "text-lg font-bold mb-2";
-            score.textContent = `Score: ${data.score}/10`;
-            container.appendChild(score);
+        // Show score at top
+        const score = document.createElement('h3')
+        score.className = 'text-lg font-bold mb-2'
+        score.textContent = `Score: ${data.score}/10`
+        container.appendChild(score)
 
-            data.results.forEach(test => {
-                let expected = test.expected, actual = test.actual;
-                try { expected = JSON.parse(expected); } catch { }
-                try { actual = JSON.parse(actual); } catch { }
+        data.results.forEach((test) => {
+          let expected = test.expected,
+            actual = test.actual
+          try {
+            expected = JSON.parse(expected)
+          } catch {}
+          try {
+            actual = JSON.parse(actual)
+          } catch {}
 
-                const div = document.createElement("div");
-                div.className = "mb-2 p-2 border rounded bg-gray-50";
-                div.innerHTML = `
+          const div = document.createElement('div')
+          div.className = 'mb-2 p-2 border rounded bg-gray-50'
+          div.innerHTML = `
         <p><strong>Input:</strong> ${test.input}</p>
         <p><strong>Expected:</strong> <pre>${JSON.stringify(expected, null, 2)}</pre></p>
         <p><strong>Actual:</strong> <pre>${JSON.stringify(actual, null, 2)}</pre></p>
-        <p><strong>Status:</strong> <span class="${test.passed ? "text-green-600 font-bold" : "text-red-600 font-bold"}">
-        ${test.passed ? "✅ Passed" : "❌ Failed"}</span></p>
-      `;
-                container.appendChild(div);
-            });
+        <p><strong>Status:</strong> <span class="${test.passed ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}">
+        ${test.passed ? '✅ Passed' : '❌ Failed'}</span></p>
+      `
+          container.appendChild(div)
+        })
 
-            // Feedback at bottom
-            const feedback = document.createElement("p");
-            feedback.className = "mt-3 font-semibold";
-            feedback.textContent = `Feedback: ${data.feedback}`;
-            container.appendChild(feedback);
-        }
+        // Feedback at bottom
+        const feedback = document.createElement('p')
+        feedback.className = 'mt-3 font-semibold'
+        feedback.textContent = `Feedback: ${data.feedback}`
+        container.appendChild(feedback)
+      }
     </script>
-
-
-
-</body>
-
+  </body>
 </html>

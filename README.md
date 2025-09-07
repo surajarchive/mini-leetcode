@@ -1,6 +1,7 @@
-### testing if it works 
+### testing if it works
 
-env 
+env
+
 ```
 DATABASE_URL="postgresql://postgres:secret@localhost:5432/postgres"
 GEMINI_API_KEY=your-api

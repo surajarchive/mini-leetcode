@@ -1,30 +1,30 @@
-import { createAgent, gemini } from "@inngest/agent-kit";
+import { createAgent, gemini } from '@inngest/agent-kit'
 
 /**
  * Type definitions for clarity and reuse
  */
 export type Submission = {
-  submissionId: string;
-  userId: string;
-  problem: string;
-  code: string;
-  language: string;
+  submissionId: string
+  userId: string
+  problem: string
+  code: string
+  language: string
   testCases: {
-    input: string;
-    expected: string;
-  }[];
-};
+    input: string
+    expected: string
+  }[]
+}
 
 export type EvaluationResult = {
   results: {
-    input: string;
-    expected: string;
-    actual: string;
-    passed: boolean;
-  }[];
-  score: number;
-  feedback: string;
-};
+    input: string
+    expected: string
+    actual: string
+    passed: boolean
+  }[]
+  score: number
+  feedback: string
+}
 
 /**
  * Code Evaluation Agent
@@ -34,10 +34,10 @@ const evaluateCode = async (
 ): Promise<EvaluationResult | null> => {
   const codeEvaluator = createAgent({
     model: gemini({
-      model: "gemini-1.5-flash",
+      model: 'gemini-1.5-flash',
       apiKey: process.env.GEMINI_API_KEY,
     }),
-    name: "Code Evaluation Agent",
+    name: 'Code Evaluation Agent',
     system: `You are a strict code evaluator.
 
 You will receive:
@@ -74,7 +74,7 @@ IMPORTANT:
   "feedback": "Your code works for some cases but fails on edge inputs."
 }
 `,
-  });
+  })
 
   const response = await codeEvaluator.run(`
 Evaluate the following submission strictly as JSON.
@@ -87,24 +87,23 @@ ${submission.code}
 
 Test Cases:
 ${JSON.stringify(submission.testCases, null, 2)}
-`);
+`)
 
-  
   // @ts-ignore
-  const raw = response.output[0]?.content ?? "";
+  const raw = response.output[0]?.content ?? ''
 
   // Strip fences, backticks, and trim
   const cleaned = raw
-    .replace(/```json/i, "")
-    .replace(/```/g, "")
-    .trim();
+    .replace(/```json/i, '')
+    .replace(/```/g, '')
+    .trim()
 
   try {
-    return JSON.parse(cleaned) as EvaluationResult;
+    return JSON.parse(cleaned) as EvaluationResult
   } catch (e: any) {
-    console.error("Failed to parse JSON:", e.message, "\nCleaned:\n", cleaned);
-    return null;
+    console.error('Failed to parse JSON:', e.message, '\nCleaned:\n', cleaned)
+    return null
   }
-};
+}
 
-export default evaluateCode;
+export default evaluateCode
